@@ -187,9 +187,9 @@ def make_contract(aid):
     fill_cell(sign.rows[3].cells[1], r["issued_on"])
     for p in d.paragraphs:
         if p.text.startswith("That the student received a"):
-            set_runs(p, f"That the student received a {r['model']}")
+            set_runs(p, f"That the student received a {r['model'] or ''}")
         elif p.text.startswith("Serial Number"):
-            set_runs(p, f"Serial Number: {r['serial']}")
+            set_runs(p, f"Serial Number: {r['serial'] or ''}")
     os.makedirs(OUT, exist_ok=True)
     base = os.path.join(OUT, f"loan_agreement_{r['student_no']}_{r['asset_tag']}")
     d.save(base + ".docx")
