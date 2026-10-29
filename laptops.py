@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Laptop loan tracker: assign laptops to students and generate contracts."""
-import argparse, csv, io, os, sqlite3, subprocess, sys
+import argparse, csv, io, os, re, sqlite3, subprocess, sys
 from datetime import date
 
 DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "laptops.db")
@@ -191,7 +191,8 @@ def make_contract(aid):
         elif p.text.startswith("Serial Number"):
             set_runs(p, f"Serial Number: {r['serial'] or ''}")
     os.makedirs(OUT, exist_ok=True)
-    base = os.path.join(OUT, f"loan_agreement_{r['student_no']}_{r['asset_tag']}")
+    safe = lambda v: re.sub(r"[^A-Za-z0-9._-]", "_", str(v))   # no path separators in file names
+    base = os.path.join(OUT, f"loan_agreement_{safe(r['student_no'])}_{safe(r['asset_tag'])}")
     d.save(base + ".docx")
     if to_pdf(base + ".docx", base + ".pdf"):
         print("Contract:", base + ".pdf")
