@@ -1,3 +1,6 @@
 __pycache__/
 laptops.db
 contracts/
+config.json
+.venv/
+.pytest_cache/
